@@ -1,0 +1,368 @@
+% ----------------------------------------------------------------
+% Version ： 1.0
+% Date : 2017-05-01
+% Author : Yixin Qian
+% ----------------------------------------------------------------
+\documentclass[
+%journal=ancac3, % for ACS Nano
+%journal=acbcct, % for ACS Chem. Biol.
+journal=jacsat, % for undefined journal
+manuscript=article]{achemso}
+
+\usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{CJK}
+\usepackage{multirow}
+\usepackage{diagbox}
+\usepackage{array}
+\newcommand{\PreserveBackslash}[1]{\let\temp=\\#1\let\\=\temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}} % tabular建立表格可用L{2cm}同时制定宽度和对齐方式
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+\newcommand*{\mycommand}[1]{\texttt{\emph{#1}}}
+
+\author{Zhongxin Ni}
+\affiliation[Shanghai University]{School of Economics, Shanghai University, Shanghai}
+\author{Yixin Qian}
+\affiliation[Shanghai University]{School of Economics, Shanghai University, Shanghai}
+\email{i.k.groupleader@unknown.uu}
+
+
+
+\title[\texttt{achemso} demonstration]
+{Bayesian Analysis of Functional Coefficient Conditional Autoregressive Range model}
+
+\begin{document}
+\begin{CJK*}{UTF8}{song}
+\begin{abstract}
+In this paper we propose a novel model names functional coefficient conditional autoregressive range (FCARR) model for analysis of nonlinearity of financial range series. The FCARR model extends existing asymmetric range-based volatility model by providing a more flexible framework to model the non-linear features. A Bayesian approach coupled with the Bayesian P-splines technique has been applied for estimation, model selection and out-of-sample forecasting. The performance of proposed methodology is assessed by simulation study. Finally, an empirical study based on weekly CSI 300 Index is conduct to illustrate the nonlinearity in the financial market of China.
+\end{abstract}
+
+
+\section{1 Introduction}
+
+Volatility analysis is one of the central theme in empirical finance cause it is an important factor in asset pricing and risk management. Hence, numerous approaches had emerged to analyze the volatility, with the generalized autoregressive conditional heteroskedasticity (GARCH) models (see Bollerslev, 1986; Engle, 1982) being the most widely used. In addition, since non-linear features are common in realistic applications (see Chen et al., 1996 for example) so that many non-linear GARCH type models had been developed. Tong (1990) proposed a self-exciting threshold ARCH (SETAR-ARCH) model, which use a piecewise linear structure to trace the changing conditional variance. Glosten et al. (1993) and Zakoian (1994) developed the threshold GARCH (TGARCH) model to capture the different effects of the positive and negative parts of the past noises on the conditional variance.
+
+However, due to the recent research, these return-based volatility models may not be the best choice to analysis the volatility because, under many circumstance, the range of time series is a more efficient measure of volatility (see Alizadeh, Brandt and Diebold, 2002; Andersen, Torben and Bollerslev, 1998; Parkinson, 1980). Consequently, using financial range data to model volatility got its momentum in recent decades. Motivated by the autoregressive conditional duration models (ACD) of Engle and Russell (1988), the conditional autoregressive range model (CARR) was proposed by Chou (2005). Just like the trend in GARCH type models, many research focus on combine the non-linearity and the origin CARR model to analyze the asymmetry volatility cluster. In this field, most work considers sign asymmetry where the volatility increases following negative asset returns. When the error term of a model is used as the threshold variable, then sign asymmetry is being captured since it is usually positive or negative movements which control the asymmetric affects on volatility. However, if we the range as the threshold variable, then the asymmetry is driven by the size of the range instead of the sign because range is a non-negative variable. Chen et al. (2008) develop a threshold CARR (TCARR) model, which introduce the piecewise linear structure into the origin CARR model to model size asymmetry. In addition, the smooth transition CARR (STCARR) model of Lin, Chen and Gerlach (2012) provides another way to capture smooth volatility asymmetries. STCARR model is able to capture both sign and size asymmetry as it assumes the logistic transition functions. Inspired by the markov regime switching GARCH (MRSGARCH) model (see, for example, Cai, 1994; Marcucci, 2009). Miao, Wu and Su (2013) proposed the markov regime switching CARR (MRSCARR) model. By separating the financial market into two regimes, they found the coefficients changed when the regime shifts.
+
+Despite the fact that the aforementioned models are useful for modeling the range, they share the limitation of parametric models in that specific parametric forms may be too restrictive to reveal the true structure. In this paper, we propose a functional coefficient conditional autoregressive range (FCARR) model with more general and flexible framework. The proposed model is likely to accommodate non-linear relationships and does not require a priori specified parametric functions. To achieve this purpose, the local polynomial regression (Fan and Gijbels, 1996) coupled with ML method can be used to analyze the model. However, cause bandwidth selection remains to be a non-trivial problem in practice, we choose a sampling-based Bayesian framework as a potential alternative. By applying Bayesian framework, better result may be achieved as long as we select appropriate prior information. Besides, sampling-based method rely less on large-sample asymptotic theory (see Scheines et al., 1999). Furthermore, the Bayesian approach is easy to practice compared with ML-based method. For instance, to estimate the unknown nonparametric functions, the ML method needs to select the bandwidth and other tuning parameters tediously while the Bayesian framework can do this through posterior sampling. Inspired by the FARCH model of Song et al. (2014), the Bayesian P-splines approach (Lang and Brezger, 2004), a Bayesian analogue of penalized splines, has been used to estimate the proposed FCARR model. In addition to the estimation, a model selection procedure based on deviance information criterion (DIC Spiegelhalter et al., 2002) is also applied when the traditional methods are not feasible under Bayesian framework.
+
+The contributions to the related literature are twofold. Firstly, we extend the CARR model to FCARR model, a more flexible framework to capture the non-linear phenomena of financial time series. Secondly, we confirm the non-linearity in the stock market of China based on an empirical study of CSI 300 Index.
+
+The remainder of this paper is organized as follows. Section 2 presents the proposed FCARR model. Section 3 introduces the Bayesian P-splines approach as well as the Bayesian framework for estimation, model selection and out-of-sample forecasting. In Section 4, a simulation study is conduct to demonstrate the performance of the Bayesian framework. Section 5 presents empirical results of volatility analysis on CSI 300 Index. Section 6 concludes this paper with a discussion.
+
+
+\section{2  Functional Coefficient CARR Model}
+
+Following the definition of by Chou (2005), let   be the logarithmic price of a specific asset and then the range series can be defined as
+\begin{equation}
+     R_t \equiv Max\{P_{\tau}\} -  Min\{P_{\tau}\}
+\end{equation}
+\begin{equation}
+    \tau = t-1,t-1+\frac{1}{n},t-1+\frac{2}{n},...,t
+\end{equation}
+
+The parametric $n$ is the number of intervals used in measuring the price within each range-measured interval. In this paper, we only consider an arch type FCARR model for convenience and lower model complexity. To capture the nonlinearity we assume the range series are generated from the following model,
+\begin{equation}
+     R_t = \lambda_t \epsilon_t
+\end{equation}
+\begin{equation}
+    \lambda_t = \alpha_0(R_{t-d}) + \alpha_1(R_{t-d})R_{t-1} + \cdots + \alpha_p(R_{t-d})R_{t-p}
+\end{equation}
+\begin{equation}
+	 \epsilon_t \mid I_{t-1} \sim f(1, \xi_t)
+\end{equation}
+where $\lambda_t$ is the conditional mean of range with a non-linear arch type structure. The positive number $d$ is the delay parameter, $p$ is the ARCH order so that we denote the model defined in (3), (4) and (5) as FCARR(p, d). $\alpha_j(\cdot)$s are unknown smoothing functions satisfying $\alpha_0(\cdot) > 0$  and $\alpha_j(\cdot) \geq 0$ when $j \geq 1$ for stationary. A natural choice for the distribution item $\epsilon_t$ is the exponential with unit mean as it has non-negative support, which suits the characteristic of range series. It has been proved that is the distribution item $\epsilon_t$, or the normalized range $\epsilon_t=R_t/\lambda_t$  is $i.i.d.$, then the conditional variance of the range is proportional to the square of its conditional expectation, see Engle (2002).
+
+The proposed FCARR model combine the advantages of CARR model in Chou (2005) and FARCH model in Song et al (2014). First, the information contained in FCARR is of greater amount than that in FARCH model cause the range series inflects the whole price path in the interval in computing process while the log-return series only uses the closing prices. Another advantage is that FCARR model is likely to capture the non-linearity of the auto-correlation of range series when compared with the fixed coefficient CARR model, which means it provides more flexibility to trace the real data generating process behind the financial market. In addition, under the above model specification, FCARR model can investigate how historical volatility influence the future volatility dynamically according to the lagged range. To sum up, FCARR model is proposed to reveal the non-linear phenomena, such as asymmetric cycles, in the range-based volatility analysis field.
+
+\section{3 Bayesian Analysis of the FCARR Model}
+\subsection{3.1 Bayesian P-splines}
+Inspired by Eilers and Marx (1996) and Lang and Brezger (2004), we introduce the Bayesian P-splines approach to estimate the functional coefficients. Following the principle of B-splines (De Boor, 2001), $\\alpha_j(R_{t-d})$ in (4) can be approximated by
+\begin{equation}
+	 \alpha_j(R_{t-d}) = \sum_{k=1}^{K_\gamma}\gamma_{jk}B_k^\gamma(R_{t-d})=\bm{\gamma}_j^T \mathbf{B}^ \gamma(R_{t-d})
+\end{equation}	
+where $K_{\gamma}$ is the number of spines determined by the number of knots, $\bm{\gamma}_j = (\gamma_{j1},\cdots,\gamma_{jk_{\gamma}})^T$ is the vector of unknown parameters, $\bm{B}^{\gamma}(R_{t-d}) = (B_1^{\gamma}(R_{t-d}), \cdots, B_{k_{\gamma}}^{\gamma}(R_{t-d}))^T$, and the functions $B_k^{\gamma}(\cdot)$ are B-splines basis. In practice, $B_k^{\gamma}(\cdot)$ is often chosen to be cubic B-splines and $K_{\gamma}$ ranging from 10 to 30 provides sufficient flexibility for modeling coefficients. In addition, we impose the constraints: $\bm{\gamma}_0^T \bm{B}^{\gamma}(R_{t-d}) > 0$, $\bm{\gamma}_j^T \bm{B}^{\gamma}(R_{t-d}) \geq 0 , j=1, \cdots , p$ for $t = d+1, \cdots, T$.
+For convenience, let $\Gamma = (\gamma_0^T, \cdots ,\gamma_p^T)^T$, $\bm{B}_{R_j}(R_{t-d})=\bm{B}^{\gamma}(T_{t-d})R_{t-j}$ for $j=1, \cdots, p$, and $\bm{B}_{R_0}^{\gamma}=\bm{B}^{\gamma}(R_{t-d})$. So far, the conditional log-likelihood function can be written as
+\begin{equation}
+	 l(\Gamma) = -\sum_{t=s+1}^{T} [ln(\lambda_t) + \frac{R_t}{\lambda_t}] = -\sum_{t=s+1}^{T}[ln(\sum_{j=0}^{p}\bm{B}_{R_j}^\gamma) + \frac{R_t}{\sum_{j=0}^p \bm{B}_{R_j}^\gamma (R_{t-d})}]
+\end{equation}
+Where  $s=max\{p,d\}$
+
+In order to attenuate the over-fitting phenomenon, smoothness tuning parameters $\rho_{\gamma j}$, which determine the penalty degree, for controlling the amount are considered into the log-likelihood function, denote $M_{\gamma}$ as penalty matrices derived from the specified difference penalty, the penalized log-likelihood can be written as:
+\begin{equation}
+	 l_p = l(\Gamma) - \sum_{j=0}^p \rho_{\gamma j} \bm{\gamma}_j^T \bm{M}_ \gamma \bm{\gamma}_j
+\end{equation}
+
+The flexibility and smoothness trade-off is tuned by the parameter $\rho_{\gamma j}$, leaving finding the its optimal values to be a non-trivial step in the maximum likelihood method. Alternatively, in the full Bayesian framework, the coefficients $\gamma$ are regard as random, consequently we can assign Gaussian prior to these coefficients so that the posterior distribution would have the same form of penalized likelihood. We can set the prior as follow:
+\begin{equation}
+	p(\bm{\gamma}_0 \mid \tau_{\gamma_0}) = (\frac{1}{2 \pi \gamma_0})^{(K_\gamma ^ *)} exp\{-\frac{1}{2 \tau_{\gamma_0} } \bm{\gamma}_0^T \bm{M}_\gamma \bm{\gamma}_j \}I(\bm{\gamma}_0^T \bm{B}^\gamma > 0)
+\end{equation}
+\begin{equation}
+	p(\bm{\gamma_j} \mid \tau_{\gamma_j}) = (\frac{1}{2 \pi \gamma_j})^{(K_{\gamma}^*)} exp \{ -\frac{1}{2\tau_{\gamma_j}}\bm{\gamma}_j^T \bm{M}_\gamma \bm{\gamma}_j \}I(\bm{\gamma}_j^T \bm{B}^\gamma \geq 0),  \quad   j=1, \cdots ,p
+\end{equation}
+where $K_{\gamma}^{*}=rank(M_{\gamma})$, $\bm{B}^{\gamma} = (\bm{B}^{\gamma}(R_1), \cdots, , \bm{B}^{\gamma}(R_{T-d}))$, and the additional variance parameters $\tau_{\gamma 0}$ and $\tau_{\gamma 1}$ can play the role of $\rho_{\gamma j}$ , and $I(\cdot)$ is an indicator function. Following the existing literature (Lang and Brezger, 2004; Song and Lu, 2012), we assign highly dispersed inverse gamma priors for the smoothing parameters $\tau_{\gamma 0}$ and $\tau_{\gamma j}$
+\begin{equation}
+	p(\tau_{\gamma_j})=IG(\alpha_{\gamma}, \beta_{\gamma}), \quad j=1,\cdots,p
+\end{equation}
+Where $\alpha_{\gamma}$ and $beta_{\gamma}$ are hyperparameters with preassigned values. To obtain highly dispersed priors, we set $\alpha_{\gamma} = 1$ and $\beta_{\gamma} = 0.005$ in this paper.
+
+\subsection{3.2 Posterior inference}
+Let $\bm{R} = \{ R_1, \cdots, R_T\}$ be the set of observed range series, $\bm{\tau}_{\gamma} = \{\tau_0, \cdots, \tau_p\}$ and $\bm{\Theta} = \{ \bm{\Gamma}, \bm{\tau_{\gamma}}\}$ include all unknown parameters in the model. After assuming all the priors of parameters, the posterior distribution which combine the information of both prior and likelihood function can be deduce easily:
+\begin{equation}
+	p(\bm{\theta} \mid \bm{R}) \propto exp \left\{ l(\Gamma) - \sum_{j=0}^p[\frac{1}{2 \tau_{\lambda_j}^2}\gamma_j^T M_{\gamma} \gamma_j - \frac{K_{\gamma}^{*}}{2} ln(\tau_{\gamma_j}^2) - (\alpha_{\gamma} +1) ln(\tau_{\gamma_j}^2) - \frac{\beta_{\gamma}}{\tau_{\gamma_j}^2}] \right\}
+\end{equation}
+Despite the fact that this posterior distribution is intractable, we can apply some modern sampling method to get the numerical estimation of each parameter. Gibbs sampler (Geman and Geman, 1984) algorithm has been applied to draw each component of $\bm{\Theta}$ given others from its full conditional distribution iteratively. Since the model is of highly nonlinearity and complexity, some full conditional distributions are nonstandard, making the sampling process not straightforwardly. To solve this problem, we use the Metropolis-Hasting (MH) algorithm (Metropolis et al., 1953; Hastings, 1970) to simulate observations from the nonstandard distributions. The implementation of the Gibbs sampler and the MH algorithm provides in the Appendix.
+
+\subsection{3.3 Bayesian model selection}
+Some information criterion such as AIC, BIC are often used to determine the order of time series models. However, as for the FCARR model these rules are nolonger feasible since the models with different orders are not nested in a larger set. Hence, we imply one simple Bayesian model selection statistic, namely, the deviance information criterion (DIC; Spiegelhalter et al., 2002) to be the selection criterion. DIC is quite easy for computation and less prone to choose the most complex model when the sample size is not very large.
+
+\subsection{3.4 Bayesian Forecasting}
+Unlike GARCH model, the range-based models are aim to analysis the conditional mean of range, which means the forecast procedure is straightforwardly. In this paper a rolling sample method is used within both CARR and FCARR models. We provide one-step-ahead forecasts to compare the short-term forecast ability of models. As for FCARR(1, 1) model, given observed series $R_1, \cdots, R_T$, the prediction of $R_{T+1}$ can be computed as follows:
+\begin{equation}
+	\hat{R}_{T+1 \mid T}=\alpha_0(R_T) + \alpha_1(R_T)R_T
+\end{equation}	
+Let $\hat{R}_{i,t+1 \mid t}$ denote the forecasts of $R_{t+1}$ from the $ith$ model, then the forecast error is $e_{i,t+1 \mid t} = R_{t+1} - \hat{R}_{i,t+1}$. Three popular measures, namely, root mean square error (RMSE), mean absolute error (MAE) and mean absolute percentage error (MAPR) are calculated as follows:
+\begin{equation}
+	RMSE:g(e_{i,t+1 \mid t}) = \frac{1}{n} \sum_{t=T}^{T+n} e_{i,t+1 \mid t}^2
+\end{equation}
+\begin{equation}
+	MAE:g(e_{i,t+1 \mid t}) = \frac{1}{n} \sum_{t=T}^{T+n} \left| e_{i,t+1 \mid t} \right|
+\end{equation}
+\begin{equation}
+	MAPE:g(e_{i,t+1 \mid t}) = \frac{1}{n} \sum_{t=T}^{T+n} \left| \frac{e_{i,t+1 \mid t}}{R_{t+1}} \right|
+\end{equation}
+By comparing the value of the above three measures, we can find the predictive ability of each model.
+
+\section{4 Simulation study}
+In order to demonstrate the empirical performance of the proposed FCARR model, we consider the following FCARR(1, 2) model in this paper:
+\begin{gather}
+	R_t = \lambda_t \epsilon_t \nonumber \\
+    \lambda_t = \alpha_0(R_{t-2}) + \alpha_1(R_{t-2})R_{t-1} \\
+    \epsilon_t \sim exp(1) \nonumber
+\end{gather}
+Where $\alpha_0(x) = 0.3 \times (x-1)^2 + 0.1$, $\alpha_1(x) = -0.6 \times cos(x - 0.5) + 0.7$. We use a cubic P-splines with 25 knots lies in the domains of $R_{t-2}$ to estimate the functional coefficients. A second-order random walk prior was set to avoid over-fitting problem. To simulation the realistic situation, we only generate the simulation observation with sample size T = 500 and 1000. The convergence is assessed by viewing trace plots of parameters form different initial values and we found most parameters were converged within 10000 iterations, therefore we took a burn-in step of 10000 iterations and obtain the Bayesian estimation from the additional 10000 samples. Figure 1 and Figure 2 shows the posterior means along with the 5\% and 95\% quantiles of functional coefficients with sample size equal 500 and 1000, respectively. As is shown in the figure, the estimated curves can capture the primary change patterns compared with true curve, which means the FCARR model is valid when non-linearity holds.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.4\textwidth, width = \textwidth]{figure1.jpg}\\
+\captionsetup{justification = raggedright}
+\caption{Estimates of the unknown smooth functions in the simulation study with sample size = 500. The solid curves represent the true curves, the dashed curves represent the estimated posterior means and the 5\% and 95\% quantiles, respectively.}
+\end{figure}
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.4\textwidth, width = \textwidth]{figure2.jpg}\\
+\captionsetup{justification = raggedright}
+\caption{Estimates of the unknown smooth functions in the simulation study with sample size = 1000. The solid curves represent the true curves, the dashed curves represent the estimated posterior means and the 5\% and 95\% quantiles, respectively.}
+\end{figure}
+
+\section{5 Empirical analysis}
+\subsection{5.1  The Dataset}
+To apply this model for finding the non-linearity in the financial market, we use the weekly range of CSI 300 Index from 2005-01-21 to 2015-11-13 as an illustration. The CSI 300 is a capitalization-weighted stock market index designed to replicate the performance of the whole market of the Chinese economy. Our target is to find the non-linear features within the financial market volatility based on range series. The range $R_t$ was defined as $R_t = 100(Max\{P_{\tau}\} - Min\{P_{\tau}\})$ cause the realistic ranges of stock index are quite small, which may bring trouble in subsequent analysis. The total number of observations is 550, the first 500 observations had been separated as to estimate the model while the remaining 50 observations as the out-of-sample set used for forecast. Figure 3 presents the plot of the weekly range in the left panel and we can find the volatility cluster phenomenon roughly by viewing the time-series graph. The exponential QQ plot shows in the right panel indicates exponential distribution with unit mean is a reasonable assumption distribution in this research. Table 1 shows some summary statistics of the CSI 300 index range series, from which we can find the series is of highly non-normality and extreme large range is more likely to occur cause the skewness is positive.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.4\textwidth, width = \textwidth]{figure3.jpg}\\
+\captionsetup{justification=raggedright, singlelinecheck=off}
+\caption{Weekly range of CSI 500 index and its exponential QQ plot}
+\end{figure}
+
+\begin{table}[H]
+\begin{center}
+\captionsetup{format=plain, labelfont=bf, singlelinecheck=off, labelsep=newline}
+\caption{Summary statics of weekly range}
+\begin{tabular}{L{0.4\textwidth}C{0.5\textwidth}}
+\hline
+& Weekly Range\\
+\hline
+Mean & 6.846\\
+Median & 5.422\\
+Min & 0.742\\
+Max & 22.640\\
+Standard Deviation & 3.054\\
+SKewness & 1.528\\
+Kurtosis & 3.102\\
+Jarque-Bera & 44.910(0.000)\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{5.2  Bayesian estimation of CSI 500 Index}
+Then a FCARR(p, d) model would be used to investigate how the non-linear feature changes dynamically according to lagged ranges. First, we need to determine the delay parameter $d$ as well as the ARCH order $p$ , DIC was used to be model selection criteria. By rotating the two orders from 1 to 2 for simplicity, 4 candidate models can be considered. We compared the above candidate models using DIC to determine the best orders. The results are presented in Table 2, from which we could find FCARR(1, 2) is the best model.
+\begin{table}[H]
+\begin{center}
+\captionsetup{format=plain, labelfont=bf, singlelinecheck=off, labelsep=newline}
+\caption{DIC of FCARR(p, d) models}
+\begin{tabular}{C{0.2\textwidth}|C{0.35\textwidth}C{0.35\textwidth}}
+%\begin{tabular}{p{0.2\textwidth}<{\centering}|p{0.35\textwidth}<{\centering}p{0.35\textwidth}<{\centering}}  another way to realize the table setting
+\hline
+\diagbox[width=0.22\textwidth]{p}{d} & 1 & 2\\ % pd用斜线分割
+\hline
+1 & 3026.582 & 3236.301\\
+2 & \textbf{3024.746} & 3236.743\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+Moreover, we used 3 measurements, namely, RMSE, MAE and MAPE to compare the goodness-of-fit of FCARR(1, 2) along with the CARR model. To show the improvement of the induction of non-linearity, CARR(1, 0) has been considered cause the only different between itself and FCARR(1, d) is the assumption of coefficients. CARR(1, 1) has also been considered due to the fact that CARR(1,1) specification is sufficient for a large class of speculative asset range, just like GARCH (1, 1), see Bollerslev, Chou, and Kroner (1992). Table 2 shows the result of RMSE, MAE and MAPR values of each model.
+\begin{table}[H]
+\begin{center}
+\captionsetup{format=plain, labelfont=bf, singlelinecheck=off, labelsep=newline}
+\caption{In-sample performances comparison among 6 models for the CSI 300 data set}
+\begin{tabular}{L{0.3\textwidth}C{0.2\textwidth}C{0.2\textwidth}C{0.2\textwidth}}
+\hline
+            & RMSE & MAE & MAPE\\
+\hline
+FCARR(1, 1)	& 2.436	& 1.818 & 0.434\\
+FCARR(1, 2)	& 2.301	& 1.697	& 0.391\\
+FCARR(2, 1)	& 2.482	& 1.807	& 0.425\\
+FCARR(2, 2)	& 3.015	& 1.853	& 0.422\\
+CARR(1,1)	& 2.263	& 1.613	& 0.331\\
+CARR(1,0)	& 2.534	& 1.909	& 0.425\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+From table 3 we can find the FCARR(1, 2) model also holds the best fitness performance within the FCARR model family. When compared with the CARR(1, 1) model, the performance of FCARR(1, 1) are only marginally lower in all the three measurements. However, FCARR(1, 2) is an ARCH(1) type model while CARR(1, 1) gets the GARCH item, which means the non-linearity of ARCH(1) model can boost its fitness to approach the GARCH(1, 1) type model, unless in this case FCARR(1, 2) model and CARR(1, 1) model shows no significant difference.
+
+In addition, we used 25 equidistant knots to construct cubic P-splines in the domains of $R_{t-2}$ and the second-order random-walk penalty was used for the Bayesian P-splines in the estimation of the functional coefficients. 50000 MCMC iterations are used, including a burn-in of the first 25000 iterations. Again, convergence is assessed by viewing trace plots of parameters form different initial values and we found convergence is always evident well before 20000 iterations. The estimated coefficients along with their 5\% and 95\% quantiles are shown in Figure 4.
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.4\textwidth, width = \textwidth]{figure4.jpg}\\
+\captionsetup{justification=raggedright, singlelinecheck=off}
+\caption{Estimated functional coefficients of the FCARR(1, 2) model in the analysis of CAI 300 index. The solid curves represent the pointwise mean curves, and the dot-dashed curves represent the 5\% and 95\% quantiles.}
+\end{figure}
+
+From Figure 4 we can find values of $\hat{\alpha}_0(\cdot)$ changes slowly over the domain of $R_{t-2}$, which means the unconditional mean of CSI 300 weekly range is time-invariant to some degree. When it comes to $\hat{\alpha}_1(\cdot)$, things are quite different. As is shown in the right-hand-side graph, a logistic-shaped curve illustrates the asymmetric in the short-run autocorrelation of range series. The arch coefficient grows from 0.24 to around 0.8 when $R_{t-2}$ grows larger. Fan and Yao (2003) highlighted that $R_{t-d}$ should be regarded as the “model-dependent variable,” which provides information on the dependence structure of the observed data. The delay parameter $d=2$ in this case indicates the historical returns will internally reflected in the model with one day lag. Moreover, the pattern of $\hat{\alpha}_1(\cdot)$ means the range series tends to be more violate and less smooth when market was in the high-volatility regime, which is consistent with previous research result (see Miao et al., 2013, Lin et al., 2012, Chen et al., 2008). Finally, the estimation results of the coefficients are neither linear nor piecewise linear, indicating the proposed FCARR model do capture more flexible dependence structure of range series than existing parametric models.
+
+\subsection{5.3  Out-of-sample forecasting}
+In order to evaluate the ability of the proposed FCARR model to produce accurate short-term out-of-sample volatility forecasts, we choose a moving window of 500 observation to construct a rolling forecasting of 50 out-of-sample observations. Since the FCARR(1, 2) model is selected in the in-sample comparisons, we just concentrate on FCARR(1, 2) and CARR(1, 1) models in this section. Table 4 shows the forecast accuracy results, from which we can find FCARR(1, 2) forecasts a little better than that of CARR(1, 1) in the under RMSE measures. However, under both MAE and MAPE measures, CARR(1, 1) marginally outperform than FCARR(1, 1). Figure 5 illustrates the curves of predictions come from these 2 models as well as the true values. In the graph, we can find that the predictions of FCARR(1, 2) model are usually more accurate in the high-volatility regime (closer to the realistic peak and bottom), which may come from the introduction of functional coefficients. CARR(1, 1) can be rewrite into an ARCH-type form so that the forecast conditional mean is a linear combination of all the passed realized ranges, making it less sensitive to sharp short-term changes. On the contrary, FCARR(1, 2) only contains the information of second order lag series and the coefficient of ARCH item becomes larger when the model-dependent variable $R_{t-2}$ grows larger, all of which will make it more sensitive to the recent innovations.
+\begin{table}[H]
+\begin{center}
+\captionsetup{format=plain, labelfont=bf, singlelinecheck=off, labelsep=newline}
+\caption{One-step-ahead forecast accuracy of FCARR(1, 2) and CARR(1, 1) models}
+\begin{tabular}{L{0.3\textwidth}C{0.2\textwidth}C{0.2\textwidth}C{0.2\textwidth}}
+\hline
+& RMSE & MAE & MAPE\\
+\hline
+FCARR(1, 2)	& 3.796	& 3.007	& 0.495\\
+CARR(1, 1)	& 3.865	& 3.001	& 0.459\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=0.6\textwidth, width = \textwidth]{figure5.jpeg}\\
+\captionsetup{justification=raggedright, singlelinecheck=off}
+\caption{Forecast curves of FCARR(1, 2) and CARR(1, 1) models. Black solid line is the true value of out-of-sample observations, red solid line represents the forecast result of CARR(1, 1) model and the blue dashed line represents the forecast result of FCARR(1, 2) model.}
+\end{figure}
+
+\section{6 Conclustion}
+In this paper, we proposed a functional coefficient conditional autoregressive range (FCARR) model to analyze non-negative range series. The FCARR model is a natural generalization of FARCH and origin CARR model, thus the non-linearity of time-series could be captured cause the coefficients are nolonger fixed. A MCMC approach coupled with Bayesian P-splines and MH algorithms has been developed for estimation, inference and model selection for this functional range model. The simulation study highlights that the proposed methodology really have the ability to illustrate the unknown coefficients. The comparison of in-sample fitness based on CSI 300 index shows the effective of FCARR model and the out-of-sample forecast result is unless at the same level as that of CARR(1, 1) model. According to the fact that volatility analysis is one of the most important field in financial study, the proposed FCARR model is quite useful for explore the non-linear correlation among financial range series. The work of this paper expands the scope of Bayesian nonparametric time series modeling in the statistics and economics literature.
+
+Future research may concentrate on the following issues. First, the FCARR model is purely endogenous so far while the model-dependence variable may be some exogenous factor such as trading volume or take-over rate. Second, FCARR can be extended to the GARCH type structure to achieve more flexibility though the posterior inference remains a severe technical problem. Furthermore, the assumption of distribution item could be set as other forms such as Weibull distribution to suit other situations. 
+
+\newpage
+% 参考文献格式配置代码
+\makeatletter
+\renewcommand\@biblabel[1]{}%本行去掉则有编号
+\renewenvironment{thebibliography}[1]
+     {\section*{\refname}%
+      \@mkboth{\MakeUppercase\refname}{\MakeUppercase\refname}%
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \advance\leftmargin by 2em%
+            \itemindent -2em
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\makeatother
+% 配置结束
+\begin{thebibliography}{99}
+\bibitem{article1} Alizadeh, S., Brandt, M. and Diebold, F. (2002), Range-based estimation of stochastic volatility models, {\it Journal of Finance}, 57, 1047-1091.
+\bibitem{article2} Andersen, Torben, and Tim Bollerslev (1998). Answering the Skeptics: Yes, Standard Volatility Models do Provide Accurate Forecasts. {\it International Economic Review}, 39, 885–905.
+\bibitem{article3} Bollerslev, T. (1986). A generalized autoregressive conditional heteroskedasticity. {\it Journal of Econometrics}, 31, 307-327. 
+\bibitem{article4} Bollerslev, T., R. Y. Chou, and K. Kroner (1992), ARCH modeling in finance: A 22 review of the theory and empirical evidence, {\it Journal of Econometrics}, 52, 5-59.
+\bibitem{article5} Cai, J. (1994). A markov model of switching-regime arch. {\it Journal of Business \& Economic Statistics}, 12(3), 309-316.
+\bibitem{article6} Chen, C. W. S., Gerlach, R. H., \& Lin, E. M. H. (2008). Forecast volatility from threshold heteroskedastic range models. {\it Computational Statistics and Data Analysis}, 52, 2990–3010.
+\bibitem{article7} Chen, S. H., Lux, T., \& Marchesi, M. (1999). Testing for non-linear structure in an artificial f inancial market. {\it Journal of Economic Behavior \& Organization}, 46(3), 327-342.
+\bibitem{article8} Chou, R.Y. (2005), Forecasting financial volatilities with extreme values: the conditional autoregressive range (CARR) model, {\it Journal of Money Credit and Banking}, 37, 561-82.
+\bibitem{book1} De Boor, C. (2001). A Practical Guide to Splines. {\it Springer-Verlag}, New York, revised edition.
+\bibitem{article9} Eilers, P. H. C. and Marx, B. D. (1996). Flexible smoothing with B-splines and penalties. {\it Statistical Science}, 11, 89-121.
+\bibitem{article10} Engle, R. F. (1982). Autoregressive conditional heteroskedasticity with estimates of the variance of U.K. inflation. {\it Econometrica}, 50, 987-1008. 
+\bibitem{article11} Engle, Robert (2002). New Frontiers for Arch Models. {\it Journal of Applied Econometrics} 17, 425–446.
+\bibitem{article12} Engle, Robert, and Jeffrey Russell (1998). Autoregressive Conditional Duration: A New Model for Irregular Spaced Transaction Data. {\it Econometrica} 66, 1127–1162.
+\bibitem{book2} Fan, J. and Gijbels, I. (1996). Local Polynomial Modelling and Its Applications. {\it Chapman \& Hall}, London.
+\bibitem{book3} Fan, J. and Yao, Q. (2003). Nonlinear Time Series: Nonparametric and Parametric Methods. {\it Springer}, New York.
+\bibitem{article13} Geman, S. and Geman, D. (1984). Stochastic relaxation, Gibbs distribution, and the Bayesian restoration of images. {\it IEEE Transactions on Pattern Analysis and Machine Intelligence}, 6, 721-741.
+\bibitem{article14} Gelman, A., Roberts, G. O., and Gilks, W. R. (1996). Efficient Metropolis jumping rules. {\it Bayesian statistics}, 5(599-608), 42.
+\bibitem{article15} Glosten, L. R., Jagannathan, R., and Runkle, D. E. (1993). On the relation between the expected value and the volatility of the nominal excess return on stocks. {\it Journal of Finance}, 48, 1779-1801.
+\bibitem{article16} Hastings, W. K. (1970). Monte Carlo sampling methods using Markov chains and their application. {\it Biometrika}, 57, 97-109.
+\bibitem{article17} Lang, S. and Brezger, A. (2004). Bayesian P-splines. {\it Journal of Computational and Graphical Statistics}, 13, 183-212.
+\bibitem{article18} Lin, E. M. H., Chen, C. W. S., \& Gerlach, R. (2012). Forecasting volatility with asymmetric smooth transition dynamic range models. {\it International Journal of Forecasting}, 28(2), 384-399.
+\bibitem{article19} Marcucci, J. (2005). Forecasting stock market volatility with regime-switching GARCH models. {\it Studies in Nonlinear dynamics and Econometrics}, 9(4), 1-53.
+\bibitem{article20} Metropolis, N., Rosenbluth, A. W., Rosenbluth, M. N., Teller, A. H., and Teller, E. (1953). Equations of state calculations by fast computing machine. {\it The Journal of Chemical Physics}, 21, 1087-1091.
+\bibitem{article21} Miao, W. C., Wu, C. C., \& Su, Y. K. (2013). Regime-switching in volatility and correlation structure using range-based models with markov-switching. {\it Economic Modelling}, 31(1), 87–93.
+\bibitem{article22} Parkinson, Michael (1980). The Extreme Value Method for Estimating the Variance of the Rate of Return. {\it Journal of Business} 53, 61–65.
+\bibitem{article23} Scheines, R., Hoijtink, H., and Boomsma, A. (1999). Bayesian estimation and testing of structural equation models. {\it Psychometrika}, 64, 37-52.
+\bibitem{article24} Song, X. Y., \& Lu, Z. H. (2012). Semiparametric transformation models with bayesian p-splines. {\it Statistics and Computing}, 22(5), 1085-1098.
+\bibitem{article25} Song, X. Y., Cai, J. H., Feng, X. N., \& Jiang, X. J. (2014). Bayesian analysis of the functional-coefficient autoregressive heteroscedastic model. {\it Bayesian Analysis}, 9(2), 371-396.
+\bibitem{article26} Spiegelhalter, D. J., Best, N. G., Carlin, B. P., and van der Linde, A. (2002). Bayesian measures of model complexity and fit (with discussion). {\it Journal of the Royal Statistical Society}, Series B, 64, 583-639.
+\bibitem{article27} Tong, H. (1990). Nonlinear Time Series Analysis: A Dynamical System Approach. {\it Oxford University Press}, London. 
+\bibitem{article28} Zakoian, J. M. (1994). Threshold heteroscedastic models. {\it Journal of Economic Dynamics and Control}, 18, 931-955.
+
+\end{thebibliography}
+
+\newpage
+\section{Appendix: Full Conditional Distributions and Implementation of the MH Algorithm.}
+
+(1) For $j=0,\cdots ,p$, the full conditional distributiong of $\gamma_j$ is:
+
+\begin{equation}
+	p(\gamma_j \mid \cdot) \propto exp \left \{ -\sum_{t=s+1}^T\left [ln(\sum_{j=0}^p \bm{B}_{R_j}^{\gamma}(R_{t-d})) + \frac{R_t}{\sum_{j=0}^p \bm{B}_{R_j}^{\gamma}(R_{t-d})}\right ] - \frac{1}{2 \tau_{\gamma_j}} \gamma_j^T M \gamma_j \right \}
+\end{equation}
+The MH algorithm (Metropolis et al. 1953; Hastings 1970) is employed to sample form this complicated distribution. The details are as follows. At the $ith$ iteration with the current values of $\{\Gamma^i,\tau_{\gamma}^i\}$, we first generate the candidate $\gamma_j^{\ast}$ from the proposal distribution
+
+\begin{equation}
+	N\left [ \gamma_j^i,\sigma_{\gamma_j}^2,\Sigma_{\gamma_j}^{\ast} \right ],
+\end{equation}
+
+Where 
+
+\begin{equation}
+	\Sigma_{\gamma_j}^{\ast - 1}=\sum_{t=s+1}^T \bm{B}_{R_j}^{\gamma}(R_{t-d}) + M/ \tau_{\gamma_j}
+\end{equation}
+
+Then the candidate $\gamma_j^{\ast}$ is accepted as the new value of $\gamma_j^{i+1}$ with probability
+ 
+\begin{equation}
+	min \left \{1,\frac{p(\lambda_j^{\ast} \mid \cdot)}{p(\lambda_j^i \mid \cdot)} \right \} \nonumber
+\end{equation}
+
+If the candidate is rejected, then  $\gamma_j^{i+1}=\gamma_j^i$, and the chain does not move. Finally, $\sigma_{\gamma_j}^2$ is selected such that the acceptance range is 0.25 or more (Gelman et al., 1996)
+(2)	The full conditional distribution of $\tau_{\gamma}$ are as follows:
+
+\begin{equation}
+	p(\tau_{\gamma_j}^{-1} \mid \cdot) \propto Gamma \left [ \alpha_{\gamma} + \frac{K_{\gamma}^{\ast}}{2}, \beta_{\gamma} + \frac{\gamma_{j}^T M \gamma_{j}}{2} \right ], \  j=0, \cdots , p
+\end{equation}
+
+%\bibliography{references.bib}
+
+\end{CJK*}
+\end{document}
