@@ -1,0 +1,350 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+% following setting for 
+\usepackage{ragged2e}
+\justifying\let\raggedright\justifying
+
+\title{Bayesian Analysis of Functional Coefficient Conditional
+Autoregressive Range model}
+
+% A subtitle is optional and this may be deleted
+\subtitle{}
+
+\author{Zhongxin Ni\inst{1} \and Yixin Qian\inst{1}}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[School of Economics, Shanghai University, Shanghai] % (optional, but mostly needed)
+{
+  \inst{1}%
+  School of Economics, Shanghai University
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{2017-11-10}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{Theoretical Computer Science}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+\section{Introduction}
+
+\begin{frame}{Introduction}{GARCH Model}
+  \begin{itemize}
+  \item {
+    Volatility analysis is one of the central theme in empirical finance cause it is an important
+    factor in asset pricing and risk management. \\
+    Hence, numerous approaches had emerged to analyze the volatility, with the generalized autoregressive conditional heteroskedasticity (GARCH) models (see Bollerslev, 1986; Engle, 1982) being the most widely used. 
+  }
+  \item {
+    due to the recent research, these return-based volatility models may not be the
+best choice to analysis the volatility because, under many circumstance, the range of time
+series is a more efficient measure of volatility (see Alizadeh, Brandt and Diebold, 2002; Andersen, Torben and Bollerslev, 1998; Parkinson, 1980). Consequently, using financial range
+data to model volatility got its momentum in recent decades.
+  }
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Introduction}
+  \begin{itemize}
+  \item {
+    Volatility analysis is one of the central theme in empirical finance cause it is an important
+factor in asset pricing and risk management. Hence, numerous approaches had emerged
+to analyze the volatility, with the generalized autoregressive conditional heteroskedasticity
+(GARCH) models (see Bollerslev, 1986; Engle, 1982) being the most widely used. 
+  }
+  \item {
+    due to the recent research, these return-based volatility models may not be the
+best choice to analysis the volatility because, under many circumstance, the range of time
+series is a more efficient measure of volatility (see Alizadeh, Brandt and Diebold, 2002; Andersen, Torben and Bollerslev, 1998; Parkinson, 1980). Consequently, using financial range
+data to model volatility got its momentum in recent decades.
+  }
+  \end{itemize}
+\end{frame}
+
+% You can reveal the parts of a slide one at a time
+% with the \pause command:
+
+\section{FCARR Model}
+
+\begin{frame}{FCARR Model}
+  \begin{itemize}
+  \item {
+    Following the definition of by Chou (2005), let   be the logarithmic price of a specific asset and then the range series can be defined as
+    \begin{equation}
+         R_t \equiv Max\{P_{\tau}\} -  Min\{P_{\tau}\}
+    \end{equation}
+    \begin{equation}
+        \tau = t-1,t-1+\frac{1}{n},t-1+\frac{2}{n},...,t
+    \end{equation}
+    
+    The parametric $n$ is the number of intervals used in measuring the price within each range-measured interval. In this paper, we only consider an arch type FCARR model for convenience and lower model complexity. To capture the nonlinearity we assume the range series are generated from the following model,
+  }
+   \end{itemize}
+\end{frame}
+
+\begin{frame}{FCARR Model}
+  \begin{itemsize}
+  \item {   
+    \begin{equation}
+         R_t = \lambda_t \epsilon_t
+    \end{equation}
+    \begin{equation}
+        \lambda_t = \alpha_0(R_{t-d}) + \alpha_1(R_{t-d})R_{t-1} + \cdots + \alpha_p(R_{t-d})R_{t-p}
+    \end{equation}
+    \begin{equation}
+         \epsilon_t \mid I_{t-1} \sim f(1, \xi_t)
+    \end{equation}
+    where $\lambda_t$ is the conditional mean of range with a non-linear arch type structure. The positive number $d$ is the delay parameter, $p$ is the ARCH order so that we denote the model defined in (3), (4) and (5) as FCARR(p, d). $\alpha_j(\cdot)$s are unknown smoothing functions satisfying $\alpha_0(\cdot) > 0$  and $\alpha_j(\cdot) \geq 0$ when $j \geq 1$ for stationary. 
+  }
+  \end{itemsize}
+\end{frame}
+
+\begin{frame}{FCARR Model}
+  \begin{itemsize}
+  \item {   
+     A natural choice for the distribution item $\epsilon_t$ is the exponential with unit mean as it has non-negative support, which suits the characteristic of range series. It has been proved that is the distribution item $\epsilon_t$, or the normalized range $\epsilon_t=R_t/\lambda_t$  is $i.i.d.$, then the conditional variance of the range is proportional to the square of its conditional expectation, see Engle (2002).
+     
+  }
+  \end{itemsize}
+\end{frame}
+
+\begin{frame}{FCARR Model}
+  \begin{itemsize}
+    \item{
+    The proposed FCARR model combine the advantages of CARR model in Chou (2005) and FARCH model in Song et al (2014).\\
+    \vspace{8pt}
+    1. the information contained in FCARR is of greater amount than that in FARCH model cause the range series inflects the whole price path in the interval in computing process while the log-return series only uses the closing prices. \\
+    \vspace{8pt}
+    2. likely to capture the non-linearity of the auto-correlation of range series when compared with the fixed coefficient CARR model, which means it provides more flexibility to trace the real data generating process behind the financial market. \\
+    \vspace{8pt}
+    3. able to investigate how historical volatility influence the future volatility dynamically according to the lagged range. 
+    }
+  \end{itemsize}
+\end{frame}
+
+\section{Bayesian Analysis of FCARR Model}
+
+
+\begin{frame}{Bayesian Analysis of FCARR Model}
+\begin{block}{Nonparametric Modeling}
+Inspired by Eilers and Marx (1996) and Lang and Brezger (2004), we introduce the Bayesian P-splines approach to estimate the functional coefficients. Following the principle of B-splines (De Boor, 2001), $\alpha_j(R_{t-d})$ in (4) can be approximated by
+\begin{equation}
+     \alpha_j(R_{t-d}) = \sum_{k=1}^{K_\gamma}\gamma_{jk}B_k^\gamma(R_{t-d})=\bm{\gamma}_j^T \mathbf{B}^ \gamma(R_{t-d})
+\end{equation}  
+where $K_{\gamma}$ is the number of spines determined by the number of knots, $\bm{\gamma}_j = (\gamma_{j1},\cdots,\gamma_{jk_{\gamma}})^T$ is the vector of unknown parameters, $\bm{B}^{\gamma}(R_{t-d}) = (B_1^{\gamma}(R_{t-d}), \cdots, B_{k_{\gamma}}^{\gamma}(R_{t-d}))^T$, and the functions $B_k^{\gamma}(\cdot)$ are B-splines basis. In practice, $B_k^{\gamma}(\cdot)$ is often chosen to be cubic B-splines and $K_{\gamma}$ ranging from 10 to 30 provides sufficient flexibility for modeling coefficients. 
+\end{block}
+
+\end{frame}
+
+\begin{frame}{Bayesian Analysis of FCARR Model}
+\begin{block}{Likelihood Function}
+In addition, we impose the constraints: $\bm{\gamma}_0^T \bm{B}^{\gamma}(R_{t-d}) > 0$, $\bm{\gamma}_j^T \bm{B}^{\gamma}(R_{t-d}) \geq 0 , j=1, \cdots , p$ for $t = d+1, \cdots, T$.
+For convenience, let $\Gamma = (\gamma_0^T, \cdots ,\gamma_p^T)^T$, $\bm{B}_{R_j}(R_{t-d})=\bm{B}^{\gamma}(T_{t-d})R_{t-j}$ for $j=1, \cdots, p$, and $\bm{B}_{R_0}^{\gamma}=\bm{B}^{\gamma}(R_{t-d})$. So far, the conditional log-likelihood function can be written as
+    \begin{equation}
+    \begin{aligned}
+         l(\Gamma) &= -\sum_{t=s+1}^{T} [ln(\lambda_t) + \frac{R_t}{\lambda_t}] \\
+         &= -\sum_{t=s+1}^{T}[ln(\sum_{j=0}^{p}\bm{B}_{R_j}^\gamma) + \frac{R_t}{\sum_{j=0}^p \bm{B}_{R_j}^\gamma (R_{t-d})}]
+    \end{aligned}
+    \end{equation}
+Where  $s=max\{p,d\}$
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Bayesian Analysis of FCARR Model}
+\begin{block}{Over-Fitting}
+In order to attenuate the over-fitting phenomenon, smoothness tuning parameters $\rho_{\gamma j}$, which determine the penalty degree, for controlling the amount are considered into the log-likelihood function, denote $M_{\gamma}$ as penalty matrices derived from the specified difference penalty, the penalized log-likelihood can be written as:
+\begin{equation}
+     l_p = l(\Gamma) - \sum_{j=0}^p \rho_{\gamma j} \bm{\gamma}_j^T \bm{M}_ \gamma \bm{\gamma}_j
+\end{equation}
+The flexibility and smoothness trade-off is tuned by the parameter $\rho_{\gamma j}$, leaving finding the its optimal values to be a non-trivial step in the maximum likelihood method.
+\end{block}
+\end{frame}
+
+\begin{frame}{Bayesian Analysis of FCARR Model}
+\begin{block}{Problems with ML Framework}
+In the context of ML estimation, these smoothing parameters are chosen via a cross-validation procedure.\\
+\vspace{18pt}
+However, the computational burden for determining the optimal values of
+$\rho_{\gamma j}$ is heavy when the number of smooth functions in the model is large.\\
+\vspace{18pt}
+Therefore, for the proposed FARCH model, the optimal values of $\rho_{\gamma j}$ is difficult to obtain using the ML-based methods.
+\end{block}
+\end{frame}
+
+\begin{frame}{Bayesian Analysis of FCARR Model}
+\begin{block}{Bayesian Framework}
+In the full Bayesian framework, the coefficients $\gamma$ are regard as random, consequently we can assign Gaussian prior to these coefficients so that the posterior distribution would have the same form of penalized likelihood. We can set the prior as follow:
+\begin{equation}
+    p(\bm{\gamma}_0 \mid \tau_{\gamma_0}) = (\frac{1}{2 \pi \gamma_0})^{(K_\gamma ^ *)} exp\{-\frac{1}{2 \tau_{\gamma_0} } \bm{\gamma}_0^T \bm{M}_\gamma \bm{\gamma}_j \}I(\bm{\gamma}_0^T \bm{B}^\gamma > 0)
+\end{equation}
+\begin{equation}
+\begin{aligned}
+    p(\bm{\gamma_j} \mid \tau_{\gamma_j}) = (\frac{1}{2 \pi \gamma_j})^{(K_{\gamma}^*)} exp \{ -\frac{1}{2\tau_{\gamma_j}}\bm{\gamma}_j^T \bm{M}_\gamma \bm{\gamma}_j \}&I(\bm{\gamma}_j^T \bm{B}^\gamma \geq 0),  \quad\\
+    &j=1, \cdots ,p
+\end{aligned}    
+\end{equation}
+where $K_{\gamma}^{*}=rank(M_{\gamma})$, $\bm{B}^{\gamma} = (\bm{B}^{\gamma}(R_1), \cdots, , \bm{B}^{\gamma}(R_{T-d}))$, and the additional variance parameters $\tau_{\gamma 0}$ and $\tau_{\gamma 1}$ can play the role of $\rho_{\gamma j}$ , and $I(\cdot)$ is an indicator function.
+\end{block}
+\end{frame}
+
+\begin{frame}{Posterior Inference}
+\begin{block}{}
+Let $\bm{R} = \{ R_1, \cdots, R_T\}$ be the set of observed range series, $\bm{\tau}_{\gamma} = \{\tau_0, \cdots, \tau_p\}$ and $\bm{\Theta} = \{ \bm{\Gamma}, \bm{\tau_{\gamma}}\}$ include all unknown parameters in the model. After assuming all the priors of parameters, the posterior distribution which combine the information of both prior and likelihood function can be deduce easily:
+\begin{equation}
+    p(\bm{\theta} \mid \bm{R}) \propto exp \left\{ l(\Gamma) - \sum_{j=0}^p[\frac{1}{2 \tau_{\lambda_j}^2}\gamma_j^T M_{\gamma} \gamma_j - \frac{K_{\gamma}^{*}}{2} ln(\tau_{\gamma_j}^2) - (\alpha_{\gamma} +1) ln(\tau_{\gamma_j}^2) - \frac{\beta_{\gamma}}{\tau_{\gamma_j}^2}] \right\}
+\end{equation}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{MCMC Method}
+\begin{block}{}
+Despite the fact that this posterior distribution is intractable, we can apply some modern sampling method to get the numerical estimation of each parameter. Gibbs sampler (Geman and Geman, 1984) algorithm has been applied to draw each component of $\bm{\Theta}$ given others from its full conditional distribution iteratively. Since the model is of highly nonlinearity and complexity, some full conditional distributions are nonstandard, making the sampling process not straightforwardly. To solve this problem, we use the Metropolis-Hasting (MH) algorithm (Metropolis et al., 1953; Hastings, 1970) to simulate observations from the nonstandard distributions
+\end{block}
+\end{frame}
+
+
+
+% Placing a * after \section means it will not show in the
+% outline or table of contents.
+\section*{Summary}
+
+\begin{frame}{Summary}
+  \begin{itemize}
+  \item
+    The \alert{first main message} of your talk in one or two lines.
+  \item
+    The \alert{second main message} of your talk in one or two lines.
+  \item
+    Perhaps a \alert{third message}, but not more than that.
+  \end{itemize}
+  
+  \begin{itemize}
+  \item
+    Outlook
+    \begin{itemize}
+    \item
+      Something you haven't solved.
+    \item
+      Something else you haven't solved.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+
+% All of the following is optional and typically not needed. 
+\appendix
+\section<presentation>*{\appendixname}
+\subsection<presentation>*{For Further Reading}
+
+\begin{frame}[allowframebreaks]
+  \frametitle<presentation>{For Further Reading}
+    
+  \begin{thebibliography}{10}
+    
+  \beamertemplatebookbibitems
+  % Start with overview books.
+
+  \bibitem{Author1990}
+    A.~Author.
+    \newblock {\em Handbook of Everything}.
+    \newblock Some Press, 1990.
+ 
+    
+  \beamertemplatearticlebibitems
+  % Followed by interesting articles. Keep the list short. 
+
+  \bibitem{Someone2000}
+    S.~Someone.
+    \newblock On this and that.
+    \newblock {\em Journal of This and That}, 2(1):50--100,
+    2000.
+  \end{thebibliography}
+\end{frame}
+
+\end{document}
+
+
